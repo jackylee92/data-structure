@@ -43,7 +43,7 @@ public class LinkList<E> {
     }
 
     // 添加到指定索引位置 
-    public void addByIndex(int index, E e) {
+    public void add(int index, E e) {
         if (index < 0 || index > size) 
             throw new IllegalArgumentException("Index out of range.");
         Node pre = dummyHead;
@@ -58,16 +58,16 @@ public class LinkList<E> {
 
      // 添加到头部
      public void addFirst(E e) {
-        addByIndex(0, e);
+        add(0, e);
     }
 
     // 添加到末尾
     public void addLast(E e) {
-        addByIndex(size, e);
+        add(size, e);
     }
 
     // 查找 指定第几个
-    public E getByIndex(int index) {
+    public E get(int index) {
        if (index < 0 || index > size) 
             throw new IllegalArgumentException("Index out of range.");
         Node cur = dummyHead.next;
@@ -79,12 +79,12 @@ public class LinkList<E> {
 
     // 获取第一个
     public E getFirst() {
-        return getByIndex(0);
+        return get(0);
     }
 
     // 获取最后一个
     public E getLast() {
-        return getByIndex(size-1);
+        return get(size-1);
     }
 
     // 设置
@@ -110,7 +110,7 @@ public class LinkList<E> {
     }
 
     // 删除元素
-    public E delByIndex(int index) {
+    public E del(int index) {
         if (index < 0 || index > size) 
             throw new IllegalArgumentException("Index out of range.");
         Node pre = dummyHead;
@@ -125,12 +125,12 @@ public class LinkList<E> {
 
     // 删除第一个元素
     public E delFirst() {
-        return delByIndex(0);
+        return del(0);
     }
 
     // 删除最后一个元素
     public E delLast() {
-        return delByIndex(size);
+        return del(size);
     }
 
     @Override
