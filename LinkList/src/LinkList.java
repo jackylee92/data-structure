@@ -109,6 +109,30 @@ public class LinkList<E> {
         return false;
     }
 
+    // 删除元素
+    public E delByIndex(int index) {
+        if (index < 0 || index > size) 
+            throw new IllegalArgumentException("Index out of range.");
+        Node pre = dummyHead;
+        for (int i=0; i<index; i++) {
+            pre = pre.next;
+        }
+        Node delNode = pre.next;
+        pre.next = delNode.next;
+        delNode.next = null;
+        return delNode.e;
+    }
+
+    // 删除第一个元素
+    public E delFirst() {
+        return delByIndex(0);
+    }
+
+    // 删除最后一个元素
+    public E delLast() {
+        return delByIndex(size);
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
@@ -132,5 +156,11 @@ public class LinkList<E> {
         System.out.println(l1);
 
         System.out.println(l1.find(1));
+
+        l1.delByIndex(3);
+        System.out.println(l1);
+
+        l1.delFirst();
+        System.out.println(l1);
     }
 }
