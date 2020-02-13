@@ -1,4 +1,6 @@
 import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 public class BinarySearchTree<E extends Comparable<E>> {
     private class Node {
         public E e;
@@ -115,6 +117,23 @@ public class BinarySearchTree<E extends Comparable<E>> {
         System.out.println(node.e);
     }
 
+    // 层序遍历 
+    public void levelOrder() {
+        if (root == null)
+            return;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()) {
+            Node cur = q.remove();
+            
+            System.out.println(cur.e);
+            if (cur.left != null)
+                q.add(cur.left);
+            if (cur.right != null) 
+                q.add(cur.right);
+        }
+    }
+
     // 获取最小值
     public E min() {
         return min(root).e;
@@ -138,14 +157,84 @@ public class BinarySearchTree<E extends Comparable<E>> {
         return max(node.right);
     }
 
-    // // 删除最小值 
-    // public E delMin() {
-    //     Node node = delMin(root);
-    //     return node.e;
-    // }
+    // 删除最小值 
+    public E delMin() {
+        E e = min();
+        root = delMin(root);
+        return e;
+    }
 
+    // 删除最小值
+    private Node delMin(Node node) {
+        if (node.left == null) {
+            Node tmpNode = node.right;
+            node.right = null;
+            size--;
+            return tmpNode;
+        }
 
-    
+        node.left = delMin(node.left);
+        return node;
+    }
+
+    // 删除最大值
+    public E delMax() {
+        E e = max();
+        root = delMax(root);
+        return e;
+    }
+
+    private Node delMax(Node node) {
+        if (node.right == null) {
+            Node tmpNode = node.left;
+            node.left = null;
+            size--;
+            return tmpNode;
+        }
+        node.right = delMax(node.right);
+        return node;
+    }
+
+    // 删除任意节点
+    public void del(E e) {
+        root = del(root, e);   
+    }
+
+    private Node del(Node node, E e) {
+        if (node == null) 
+            return null;
+        if (e.compareTo(node.e) < 0) {
+            node.left = del(node.left, e);
+            return node;
+        } else if (e.compareTo(node.e) > 0) {
+            node.right = del(node.right, e);
+            return node;
+        } else { // e.compareTo(node.e) == 0
+            // 左子树为空的情况
+            if (node.left == null) {
+                Node tmpNode = node.left;
+                node.left = null;
+                size--;
+                return tmpNode;
+            }
+            // 右子树为空的情况
+            if (node.right == null) {
+                Node tmpNode = node.right;
+                node.right = null;
+                size--;
+                return tmpNode;
+            }
+            // 左右子树都不为空的情况
+            // 找到最右子树最小的节点来补充到要删除的位置
+            Node successor = min(node);
+            successor.right = delMin(node.right);
+            successor.left = node.left;
+
+            node.right = node.left = null;
+
+            return successor;
+        }
+    }
 
     @Override
     public String toString() {
