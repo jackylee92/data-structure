@@ -2,6 +2,8 @@ import java.util.ArrayList;
 public class Main{
     // 搜索树Set测试
     private void testBSTSet() {
+        long startTime = System.nanoTime();
+
         System.out.println("傲慢与偏见");
         ArrayList<String> word1 = new ArrayList<>();
         if (FileOperation.readFile("Set/pride-and-prejudice.txt", word1)) {
@@ -30,10 +32,16 @@ public class Main{
 
             System.out.println("Total different words: " + set2.getSize());
         }
+
+        long endTime = System.nanoTime();
+
+        System.out.println("Times:" + (endTime-startTime)/1000000000.0);
     }
 
     // 链表Set测试
     private void testLinkListSet() {
+        long startTime = System.nanoTime();
+
         System.out.println("傲慢与偏见");
         ArrayList<String> word1 = new ArrayList<>();
         if (FileOperation.readFile("Set/pride-and-prejudice.txt", word1)) {
@@ -65,6 +73,10 @@ public class Main{
 
             System.out.println("Total different words: " + l2.getSize());
         }
+
+        long endTime = System.nanoTime();
+
+        System.out.println("Times:" + (endTime-startTime)/1000000000.0);
     }
     
     public static void main(String argv[]) {
