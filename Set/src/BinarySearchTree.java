@@ -262,19 +262,4 @@ public class BinarySearchTree<E extends Comparable<E>> {
         }
         return str.toString();
     }
-
-
-    public static void main(String[] argv) {
-        BinarySearchTree<Integer> bst = new BinarySearchTree<>();
-        int[] tree = {3,4,5,12,343,8,10,22};
-        for (int i=0; i<tree.length; i++) {
-            bst.add(tree[i]);
-        }
-
-        bst.preOrder();
-        System.out.println();
-        bst.preOrderNR();
-
-       // System.out.println(bst);
-    }
 }
