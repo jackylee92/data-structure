@@ -73,11 +73,12 @@ public class BinarySearchTreeMap<K extends Comparable<K>,V> implements Map<K, V>
     private Node remove(Node node, K key) {
         if (node == null)
             return null;
-        if (node.key.compareTo(key) < 0) {
+        if (key.compareTo(node.key) < 0) {
             node.left = remove(node.left, key);
             return node;
-        } else if (node.key.compareTo(key) > 0) {
+        } else if (key.compareTo(node.key) > 0) {
             node.right = remove(node.right, key);
+            return node;
         } else { // node.key.compareTo(key) ==0 的情况
             if (node.left == null) {
                 Node tmpNode = node.right;
@@ -92,7 +93,8 @@ public class BinarySearchTreeMap<K extends Comparable<K>,V> implements Map<K, V>
                 return tmpNode;
             }
 
-            Node min = min(node);
+            // 找右子树的最小节点
+            Node min = min(node.right);
             min.right = removeMin(node.right);
             min.left = node.left;
 
@@ -115,7 +117,7 @@ public class BinarySearchTreeMap<K extends Comparable<K>,V> implements Map<K, V>
     }
 
     private Node min(Node node) {
-        if (node == null) 
+        if (node.left == null) 
             return node;
         return min(node.left);
     }
