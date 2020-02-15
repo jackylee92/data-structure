@@ -36,7 +36,7 @@ public class SegmentTree<E>{
         return query(0, 0, data.length - 1, qL, qR);
     }
 
-    public E query(int index, int l, int r, int qL, int qR) {
+    private E query(int index, int l, int r, int qL, int qR) {
         if (l == qL && r == qR) 
             return tree[index];
         
@@ -59,6 +59,32 @@ public class SegmentTree<E>{
         // 如果一部分在右
         E rightE = query(rightIndex, mid + 1, r, mid + 1, qR);
         return merger.merge(leftE, rightE);
+    }
+
+    // 修改节点
+    public void set(int index, E e) {
+        if (index < 0 || index > data.length) 
+            throw new IllegalArgumentException("Index out of range");
+        set(0, 0, tree.length-1, index, e);
+    }
+
+    private void set(int index, int l, int r, int index2, E e) {
+        if (l == r) {
+            tree[index] = e;
+            return;
+        }
+
+        int mid = l + (r - l) / 2;
+        int leftIndex = leftChild(index);
+        int rightIndex = rightChild(index);
+
+        if (index2 < mid) 
+            set(rightIndex, mid + 1, r, index2, e);
+        else 
+            set(leftIndex, l, mid, index2, e);
+        
+        // 这一步比较关键，表示将所有父节点重新溶合
+        tree[index] = merger.merge(tree[leftIndex], tree[rightIndex]);
     }
 
     public int getSize() {
