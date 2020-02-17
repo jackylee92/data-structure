@@ -26,6 +26,8 @@ int main() {
     // TestHelper::printArray(arr, n);
     TestHelper::testSort("Select Sort", selectSort, arr, n);
 
+    
+
     delete[] arr;
 
     // 对结构体的排序
