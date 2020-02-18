@@ -3,6 +3,7 @@
 #include "MergeSortv1.h"
 #include "MergeSortv2.h"
 #include "InsertionSort.h"
+#include "MergeSortv3.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ int main() {
     arr2 = TestHelper::copyIntArray(arr, n);
 
     TestHelper::testSort("Insertion Sort", insertionSort, arr, n);
-    TestHelper::testSort("Merger Sort", mergeSort, arr2, n);
+    TestHelper::testSort("Merge Sort", mergeSort, arr2, n);
 
     if (!TestHelper::isSort(arr, n)) {
         cout<<"arr1 is not sort"<<endl;
@@ -42,6 +43,18 @@ int main() {
         cout<<"arr2 is not sort"<<endl;
     }
 
+    delete[] arr;
+    delete[] arr2;
+
+    // 自底向上归并排序 
+    cout<<"自底向上归并排序"<<endl;
+    arr = TestHelper::generateRandArray(n, 0, n);
+
+    TestHelper::testSort("Merge bu to up", mergeSortBu, arr, n);
+
+    if (!TestHelper::isSort(arr, n)) {
+        cout<<"Arr is not sort"<<endl;
+    }
     // TestHelper::printArray(arr, n);
 
     
