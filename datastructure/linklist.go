@@ -5,7 +5,6 @@ import "fmt"
 type node struct {
 	data interface{}
 	next *node
-	prev *node
 }
 
 type linkList struct {
