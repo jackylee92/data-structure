@@ -37,9 +37,11 @@ func (ll *rlLinklist) Add(index int, data interface{}) {
 		pre = pre.next
 	}
 	newNode := rlNode{data: data}
-	pre.next.prev = &newNode
+
 	newNode.next = pre.next
 	newNode.prev = pre
+
+	pre.next.prev = &newNode
 	pre.next = &newNode
 	ll.size++
 }
@@ -62,8 +64,10 @@ func (ll *rlLinklist) Remove(index int) interface{} {
 	}
 	delNode := pre.next
 	delNode.next.prev = pre
+
 	pre.next = delNode.next
 	delNode.next = nil
+	delNode.prev = nil
 	ll.size--
 	return delNode.data
 }
