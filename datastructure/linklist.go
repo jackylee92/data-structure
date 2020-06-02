@@ -58,6 +58,35 @@ func (ll *linkList) Remove(index int) *node {
 	return delNode
 }
 
+func (ll *linkList) RemoveByValue(data interface{}) {
+	var delNode *node
+	pre := ll.headNode
+	for pre != nil {
+		if pre.next != nil && pre.next.data == data {
+			delNode = pre.next
+			break
+		}
+		pre = pre.next
+	}
+	if delNode != nil {
+		delNode := pre.next
+		pre.next = delNode.next
+		delNode.next = nil
+	}
+	ll.size--
+}
+
+func (ll *linkList) Contains(data interface{}) bool {
+	pre := ll.headNode
+	for pre != nil {
+		if pre.data == data {
+			return true
+		}
+		pre = pre.next
+	}
+	return false
+}
+
 func (ll *linkList) RemoveFirst() *node {
 	return ll.Remove(0)
 }
