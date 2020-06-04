@@ -1,6 +1,7 @@
 package datastructure
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"testing"
@@ -8,10 +9,12 @@ import (
 
 func TestHashData(t *testing.T) {
 	h := Hash()
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 1000; i++ {
 		key := "key"+strconv.Itoa(i)
 		h.Add(key, i)
 	}
 
-	fmt.Println(h)
+	ret, _ := json.Marshal(h.hashTable)
+
+	fmt.Println(string(ret))
 }
