@@ -92,7 +92,7 @@ func (ll *linkList) RemoveFirst() *node {
 }
 
 func (ll *linkList) RemoveLast() *node {
-	return ll.Remove(ll.size)
+	return ll.Remove(ll.size-1)
 }
 
 func (ll *linkList) Size() int {

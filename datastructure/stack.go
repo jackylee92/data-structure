@@ -7,7 +7,7 @@ type stack struct {
 
 func Stack() *stack {
 	return &stack{
-		data: &linkList{},
+		data: Linklist(),
 	}
 }
 
@@ -16,12 +16,12 @@ func (s *stack) Push(data interface{}) {
 	s.peekData = data
 }
 
-func (s *stack) Pop(data interface{}) interface{} {
+func (s *stack) Pop() interface{} {
 	return s.data.RemoveFirst().data
 }
 
 func (s *stack) Peek() interface{} {
-	return s.data.headNode.next.data
+	return s.peekData
 }
 
 func (s *stack) Size() int {
