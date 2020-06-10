@@ -197,33 +197,33 @@ func (b *binarySearchTree) del(node *binarySearchTreeNode, score int64) *binaryS
 	if node.score > score {
 		node.left = b.del(node.left, score)
 		return node
-	} else if node.score < score {
+	}
+	if node.score < score {
 		node.right = b.del(node.right, score)
 		return node
-	} else {
-		// 找到元素
-		if node.left == nil {
-			tmp := node.right
-			node.right = nil
-			b.size--
-			return tmp
-		}
-		if node.right == nil {
-			tmp := node.left
-			node.left = nil
-			b.size--
-			return tmp
-		}
-
-		// 到这里说明左右子树都不为nil
-		// 将右子树最小元素放到当前要删除的元素位置
-		minLeftNode := b.min(node.right)
-		minLeftNode.right = b.delMin(node.right)
-		minLeftNode.left = node.left
-
-		node.left = nil
-		node.right = nil
-
-		return minLeftNode
 	}
+	// 找到元素
+	if node.left == nil {
+		tmp := node.right
+		node.right = nil
+		b.size--
+		return tmp
+	}
+	if node.right == nil {
+		tmp := node.left
+		node.left = nil
+		b.size--
+		return tmp
+	}
+
+	// 到这里说明左右子树都不为nil
+	// 将右子树最小元素放到当前要删除的元素位置
+	minLeftNode := b.min(node.right)
+	minLeftNode.right = b.delMin(node.right)
+	minLeftNode.left = node.left
+
+	node.left = nil
+	node.right = nil
+
+	return minLeftNode
 }
