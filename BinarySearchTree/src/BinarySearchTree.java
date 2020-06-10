@@ -214,21 +214,21 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else { // e.compareTo(node.e) == 0
             // 左子树为空的情况
             if (node.left == null) {
-                Node tmpNode = node.left;
-                node.left = null;
-                size--;
-                return tmpNode;
-            }
-            // 右子树为空的情况
-            if (node.right == null) {
                 Node tmpNode = node.right;
                 node.right = null;
                 size--;
                 return tmpNode;
             }
+            // 右子树为空的情况
+            if (node.right == null) {
+                Node tmpNode = node.left;
+                node.left = null;
+                size--;
+                return tmpNode;
+            }
             // 左右子树都不为空的情况
             // 找到最右子树最小的节点来补充到要删除的位置
-            Node successor = min(node);
+            Node successor = min(node.right);
             successor.right = delMin(node.right);
             successor.left = node.left;
 
