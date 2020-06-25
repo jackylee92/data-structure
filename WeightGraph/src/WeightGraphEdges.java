@@ -6,6 +6,18 @@ public class WeightGraphEdges implements Comparable<WeightGraphEdges> {
         this.weight = weight;
     }
 
+    public int V() {
+        return v;
+    }
+
+    public int W() {
+        return w;
+    }
+
+    public int weight() {
+        return weight;
+    }
+
     @Override
     public int compareTo(WeightGraphEdges o) {
         return weight - o.weight;
@@ -14,10 +26,7 @@ public class WeightGraphEdges implements Comparable<WeightGraphEdges> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("V:"+v);
-        sb.append("W:"+w);
-        sb.append("Weight:"+weight);
-
+        sb.append("("+v+"-"+w+":"+weight+")");
         return sb.toString();
     }
 }
