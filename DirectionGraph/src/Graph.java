@@ -69,6 +69,39 @@ class Graph {
         this(filename, false);
     }
 
+    public Graph(TreeSet<Integer>[] adj, boolean directed) {
+        this.direction = directed;
+        this.adj = adj;
+        this.V = adj.length;
+        this.E = 0;
+
+        indegrees = new int[V];
+        outdegress = new int[V];
+        for (int v = 0; v < V; v++) {
+            for (int w: adj(v)) {
+                outdegress[v] ++;
+                indegrees[w] ++;
+                this.E ++;
+            }
+        }
+        // 如果是无向图，要除以2
+        if (!directed) this.E /= 2;
+    }
+
+    public Graph reverseGraph() {
+        TreeSet<Integer>[] rAdj = new TreeSet[V];
+        for (int i=0; i<V; i++) {
+            rAdj[i] = new TreeSet<>();
+        }
+
+        for (int v=0; v<V; v++) {
+            for (int w: adj(v)) {
+                rAdj[w].add(v);
+            }
+        }
+        return new Graph(rAdj, true);
+    }
+
     public int V() {
         return V;
     }
