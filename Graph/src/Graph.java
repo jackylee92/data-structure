@@ -86,6 +86,33 @@ class Graph {
             throw new IllegalArgumentException("vertex "+v+" is invalid.");
     }
 
+    public void removeEdge(int v, int w) {
+        validateVertex(v);
+        validateVertex(w);
+
+        if (adj[v].contains(w)) E--;
+
+        adj[v].remove(w);
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            Graph cloned = (Graph) super.clone();
+            cloned.adj = new TreeSet[V];
+            for (int v=0; v < V; v++) {
+                cloned.adj[v] = new TreeSet<Integer>();
+                for (int w: adj[v]) {
+                    cloned.adj[v].add(w);
+                }
+            }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

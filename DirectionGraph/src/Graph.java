@@ -2,11 +2,10 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.Map;
+import java.util.TreeSet;
 
 /**
- * 带权图建图
+ * 无权图（无权、有向图）
  * 红黑树的实现方式（图的最终实现方式）
  * 在以下 V表示顶点数 E表示图的边数
  * 空间复杂度 O(V + E)   这里V和E都是必要的，极端情况下可能E=0
@@ -14,22 +13,28 @@ import java.util.Map;
  * 两点是否相邻 O(logV) 
  * 查找所有邻边 O(degree(V)) 默认为顶点的度， 如果是完全图或者稠密图接近O(V)
  */
-class WeightGraph {
+class Graph {
     private int V; // 图的顶点数
     private int E; // 图的边数
-    private TreeMap<Integer, Integer>[] adj; // 图方隈
+    private TreeSet<Integer>[] adj; // 图方隈
+    private boolean direction = false; 
+    private int[] indegrees; // 入度
+    private int[] outdegress; // 出度
 
-    public WeightGraph(String filename) {
+    public Graph(String filename, boolean direction) {
+        this.direction = direction;
         File file = new File(filename);
         try(Scanner scanner = new Scanner(file)){
             V = scanner.nextInt();
             if (V < 0) 
                 throw new IllegalArgumentException("V must be non-negative");
 
-            adj = new TreeMap[V];
+            adj = new TreeSet[V];
             for (int i = 0; i < V; i++) {
-                adj[i] = new TreeMap<Integer,Integer>();
+                adj[i] = new TreeSet<Integer>();
             }
+            indegrees = new int[V];
+            outdegress = new int[V];
 
             E = scanner.nextInt();
             if (E < 0)
@@ -40,21 +45,28 @@ class WeightGraph {
                 validateVertex(a);
                 int b = scanner.nextInt(); 
                 validateVertex(b);
-                int weight = scanner.nextInt();
 
                 if (a == b)
                     throw new IllegalArgumentException("Self Loop is Detected.");
 
-                if (adj[a].containsKey(b)) 
+                if (adj[a].contains(b)) 
                     throw new IllegalArgumentException("Parallel Edges are Detected.");
 
-                adj[a].put(b, weight);
-                adj[b].put(a, weight);
+                adj[a].add(b);
+                if (direction) {
+                    indegrees[b] ++;
+                    outdegress[a] ++;
+                }
+                if (!direction)
+                    adj[b].add(a);
             }
         } catch(IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public Graph(String filename) {
+        this(filename, false);
     }
 
     public int V() {
@@ -69,26 +81,13 @@ class WeightGraph {
     public  boolean hasEdge(int v, int w) {
         validateVertex(v);
         validateVertex(w);
-        return adj[v].containsKey(w);
+        return adj[v].contains(w);
     }
 
     // 获取一个顶点的邻边
     public Iterable<Integer> adj(int v) {
         validateVertex(v);
-        return adj[v].keySet();
-    }
-
-    // 获取边的权值
-    public int getWeight(int v, int w) {
-        if (hasEdge(v, w))
-            return adj[v].get(w);
-        throw new IllegalArgumentException("v and w is out of range.");
-    }
-
-    // 获取一个项点的度（有多少条邻边）
-    public int degree(int v) {
-        validateVertex(v);
-        return adj[v].size();
+        return adj[v];
     }
 
     public void validateVertex(int v) {
@@ -96,13 +95,46 @@ class WeightGraph {
             throw new IllegalArgumentException("vertex "+v+" is invalid.");
     }
 
+    public boolean isDirection() {
+        return direction;
+    }
+
+    // 获取一个项点的度（有多少条邻边）
+    public int degree(int v) {
+        if (isDirection()) throw new RuntimeException("degree only work on undiretion graph.");
+        validateVertex(v);
+        return adj[v].size();
+    }
+
+    // 获取入度
+    public int indegree(int v) {
+        if (!isDirection()) throw new RuntimeException("indegree only work on diretion graph.");
+        validateVertex(v);
+        return indegrees[v];
+    }
+
+    // 获取出度
+    public int outdegree(int v) {
+        if (!isDirection()) throw new RuntimeException("outdegree only work on diretion graph.");
+        validateVertex(v);
+        return outdegree(v);
+    }
+
     public void removeEdge(int v, int w) {
         validateVertex(v);
         validateVertex(w);
 
-        if (adj[v].contains(w)) E--;
+        if (adj[v].contains(w)) {
+            E--;
+            if (isDirection()) {
+                indegrees[w] --;
+                outdegress[v] --;
+            }
+        } 
 
         adj[v].remove(w);
+        if (!isDirection())
+            adj[w].remove(v);
     }
 
     @Override
@@ -130,8 +162,8 @@ class WeightGraph {
 
         for (int v=0; v < V; v++) {
             sb.append(String.format("%d: ", v));
-            for (Map.Entry<Integer, Integer> entry: adj[v].entrySet()) {
-                sb.append(String.format("(%d: %d)", entry.getKey(), entry.getValue()));
+            for (int w: adj[v]) {
+                sb.append(String.format("%d ", w));
             }
             sb.append("\n");
         }
@@ -139,8 +171,12 @@ class WeightGraph {
     }
 
     public static void main(String[] args) {
-        WeightGraph adj = new WeightGraph("./WeightGraph/g.txt");
-        System.out.println(adj);
+        Graph g = new Graph("./DirectionGraph/ug.txt", true);
+        // System.out.println(adj);
+
+        for (int v=0; v<g.V; v++) {
+            System.out.println(g.indegrees[v] + " " + g.outdegress[v]);
+        }
     }
 
 }

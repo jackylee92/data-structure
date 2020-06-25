@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import java.util.Map;
 
 /**
- * 带权图建图
+ * 带权图（带权、有向图）
  * 红黑树的实现方式（图的最终实现方式）
  * 在以下 V表示顶点数 E表示图的边数
  * 空间复杂度 O(V + E)   这里V和E都是必要的，极端情况下可能E=0
@@ -18,8 +18,10 @@ class WeightGraph {
     private int V; // 图的顶点数
     private int E; // 图的边数
     private TreeMap<Integer, Integer>[] adj; // 图方隈
+    private boolean direction = false ;
 
-    public WeightGraph(String filename) {
+    public WeightGraph(String filename, boolean direction) {
+        this.direction = direction;
         File file = new File(filename);
         try(Scanner scanner = new Scanner(file)){
             V = scanner.nextInt();
@@ -49,12 +51,17 @@ class WeightGraph {
                     throw new IllegalArgumentException("Parallel Edges are Detected.");
 
                 adj[a].put(b, weight);
-                adj[b].put(a, weight);
+                if (!direction) 
+                    adj[b].put(a, weight);
             }
         } catch(IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public WeightGraph(String filename) {
+        this(filename, false);
     }
 
     public int V() {
@@ -85,42 +92,14 @@ class WeightGraph {
         throw new IllegalArgumentException("v and w is out of range.");
     }
 
-    // 获取一个项点的度（有多少条邻边）
-    public int degree(int v) {
-        validateVertex(v);
-        return adj[v].size();
-    }
-
     public void validateVertex(int v) {
         if (v < 0 || v >= V) 
             throw new IllegalArgumentException("vertex "+v+" is invalid.");
     }
 
-    public void removeEdge(int v, int w) {
-        validateVertex(v);
-        validateVertex(w);
-
-        if (adj[v].contains(w)) E--;
-
-        adj[v].remove(w);
-    }
-
-    @Override
-    public Object clone() {
-        try {
-            Graph cloned = (Graph) super.clone();
-            cloned.adj = new TreeSet[V];
-            for (int v=0; v < V; v++) {
-                cloned.adj[v] = new TreeSet<Integer>();
-                for (int w: adj[v]) {
-                    cloned.adj[v].add(w);
-                }
-            }
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    // 是否是有向图
+    public boolean isDirection() {
+        return direction;
     }
 
     @Override
