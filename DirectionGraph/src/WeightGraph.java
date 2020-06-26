@@ -33,26 +33,16 @@ class WeightGraph {
                 adj[i] = new TreeMap<Integer,Integer>();
             }
 
-            E = scanner.nextInt();
-            if (E < 0)
+            int e = scanner.nextInt();
+            if (e < 0)
                 throw new IllegalArgumentException("E must be non-negative");
 
-            for (int i=0; i < E; i++) {
+            for (int i=0; i < e; i++) {
                 int a = scanner.nextInt();
-                validateVertex(a);
                 int b = scanner.nextInt(); 
-                validateVertex(b);
                 int weight = scanner.nextInt();
 
-                if (a == b)
-                    throw new IllegalArgumentException("Self Loop is Detected.");
-
-                if (adj[a].containsKey(b)) 
-                    throw new IllegalArgumentException("Parallel Edges are Detected.");
-
-                adj[a].put(b, weight);
-                if (!direction) 
-                    adj[b].put(a, weight);
+                addEdge(a, b, weight);
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -62,6 +52,41 @@ class WeightGraph {
 
     public WeightGraph(String filename) {
         this(filename, false);
+    }
+
+    public WeightGraph(int V, boolean direction) {
+        this.V = V;
+        this.direction = direction;
+        this.E = 0;
+
+        adj = new TreeMap[V];
+        for (int i=0; i<V; i++) {
+            adj[i] = new TreeMap<Integer, Integer>();
+        }
+    }
+
+    public void setWeight(int v, int w, int weight) {
+        if (!hasEdge(v, w)) throw new IllegalArgumentException(String.format("No edge %d-%d", v, w));
+
+        adj[v].put(w, weight);
+        if (!direction) 
+            adj[w].put(v, weight);
+    }
+
+    public void addEdge(int a, int b, int v) {
+        validateVertex(a);
+        validateVertex(b);
+
+        if (a == b)
+        throw new IllegalArgumentException("Self Loop is Detected.");
+
+        if (adj[a].containsKey(b)) 
+            throw new IllegalArgumentException("Parallel Edges are Detected.");
+
+        adj[a].put(b, v);
+        if (!direction) 
+            adj[b].put(a, v);
+        E++;
     }
 
     public int V() {
@@ -100,6 +125,17 @@ class WeightGraph {
     // 是否是有向图
     public boolean isDirection() {
         return direction;
+    }
+
+    public void removeEdge(int v, int w){
+        validateVertex(v);
+        validateVertex(w);
+
+        if(adj[v].containsKey(w)) E --;
+
+        adj[v].remove(w);
+        if(!direction)
+            adj[w].remove(v);
     }
 
     @Override
