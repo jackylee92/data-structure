@@ -13,13 +13,13 @@ import java.util.TreeSet;
  * 两点是否相邻 O(logV) 
  * 查找所有邻边 O(degree(V)) 默认为顶点的度， 如果是完全图或者稠密图接近O(V)
  */
-class Graph {
+class Graph implements Cloneable {
     private int V; // 图的顶点数
     private int E; // 图的边数
     private TreeSet<Integer>[] adj; // 图方隈
     private boolean direction = false; 
     private int[] indegrees; // 入度
-    private int[] outdegress; // 出度
+    private int[] outdegres; // 出度
 
     public Graph(String filename, boolean direction) {
         this.direction = direction;
@@ -34,7 +34,7 @@ class Graph {
                 adj[i] = new TreeSet<Integer>();
             }
             indegrees = new int[V];
-            outdegress = new int[V];
+            outdegres = new int[V];
 
             E = scanner.nextInt();
             if (E < 0)
@@ -55,7 +55,7 @@ class Graph {
                 adj[a].add(b);
                 if (direction) {
                     indegrees[b] ++;
-                    outdegress[a] ++;
+                    outdegres[a] ++;
                 }
                 if (!direction)
                     adj[b].add(a);
@@ -76,10 +76,10 @@ class Graph {
         this.E = 0;
 
         indegrees = new int[V];
-        outdegress = new int[V];
+        outdegres = new int[V];
         for (int v = 0; v < V; v++) {
             for (int w: adj(v)) {
-                outdegress[v] ++;
+                outdegres[v] ++;
                 indegrees[w] ++;
                 this.E ++;
             }
@@ -150,7 +150,7 @@ class Graph {
     public int outdegree(int v) {
         if (!isDirection()) throw new RuntimeException("outdegree only work on diretion graph.");
         validateVertex(v);
-        return outdegree(v);
+        return outdegres[v];
     }
 
     public void removeEdge(int v, int w) {
@@ -159,9 +159,9 @@ class Graph {
 
         if (adj[v].contains(w)) {
             E--;
-            if (isDirection()) {
+            if (direction) {
                 indegrees[w] --;
-                outdegress[v] --;
+                outdegres[v] --;
             }
         } 
 
@@ -208,7 +208,7 @@ class Graph {
         // System.out.println(adj);
 
         for (int v=0; v<g.V; v++) {
-            System.out.println(g.indegrees[v] + " " + g.outdegress[v]);
+            System.out.println(g.indegrees[v] + " " + g.outdegres[v]);
         }
     }
 

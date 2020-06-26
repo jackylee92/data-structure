@@ -12,7 +12,7 @@ import java.util.TreeSet;
  * 两点是否相邻 O(logV) 
  * 查找所有邻边 O(degree(V)) 默认为顶点的度， 如果是完全图或者稠密图接近O(V)
  */
-class Graph {
+class Graph implements Cloneable {
     private int V; // 图的顶点数
     private int E; // 图的边数
     private TreeSet<Integer>[] adj; // 图方隈
@@ -96,18 +96,18 @@ class Graph {
     }
 
     @Override
-    public Object clone() {
-        try {
+    public Object clone(){
+        try{
             Graph cloned = (Graph) super.clone();
             cloned.adj = new TreeSet[V];
-            for (int v=0; v < V; v++) {
+            for(int v = 0; v < V; v ++){
                 cloned.adj[v] = new TreeSet<Integer>();
-                for (int w: adj[v]) {
+                for(int w: adj[v])
                     cloned.adj[v].add(w);
-                }
             }
             return cloned;
-        } catch (CloneNotSupportedException e) {
+        }
+        catch (CloneNotSupportedException e){
             e.printStackTrace();
         }
         return null;
