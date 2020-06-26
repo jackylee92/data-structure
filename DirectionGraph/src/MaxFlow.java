@@ -8,6 +8,11 @@ import java.util.Arrays;
 // 网络最大流
 // Ford-Fullkerson思想
 // Edmonds-Karp 算法
+// 网络最大流量的核心步骤：
+// 1. 残量图建模
+// 2. 广度优先求增文路径
+// 3. 更新残量图的流量权值
+// 4. 重复2、3步，直到没有增广路径
 class MaxFlow {
     private WeightGraph net;
     private int s,t;
